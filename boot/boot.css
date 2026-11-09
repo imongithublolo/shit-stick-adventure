@@ -1,0 +1,453 @@
+/* ============================================================
+   SHIT STICK ADVENTURE — boot / setup screens
+   crude ms-paint energy, comic sans, hand-drawn borders
+   ============================================================ */
+
+:root {
+  --ink: #17130f;
+  --paper: #fdfdfb;
+  --paper-dk: #f4f1e8;
+  --brown: #7a4a2b;
+  --brown-dk: #5e3820;
+  --green: #37b34a;
+  --green-dk: #2b8f3c;
+  --red: #e04c3c;
+  --gray: #8d857a;
+  --comic: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue",
+    "Segoe Print", "Bradley Hand", cursive;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+/* ---------- the boot overlay ---------- */
+#boot {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--paper);
+  font-family: var(--comic);
+  color: var(--ink);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background 0.5s ease;
+}
+#boot.dark { background: #000; }
+#boot.hidden { display: none; }
+
+.screen {
+  display: none;
+  min-height: 100%;
+  padding: 28px 18px 60px;
+  flex-direction: column;
+  align-items: center;
+  animation: pop-in 0.35s ease both;
+}
+.screen.on { display: flex; }
+#boot.dark .screen { padding: 0; justify-content: center; }
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.97) rotate(-0.3deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- shared bits ---------- */
+.wob {
+  border: 3px solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  background: #fff;
+}
+.tag {
+  position: fixed;
+  top: 10px;
+  left: 12px;
+  transform: rotate(-3deg);
+  font-size: 12px;
+  padding: 3px 12px;
+  background: var(--paper-dk);
+  border: 2px solid var(--ink);
+  border-radius: 155px 12px 135px 12px / 12px 135px 12px 155px;
+  z-index: 5;
+}
+
+.game-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: center;
+  margin: 8px 0 2px;
+}
+.game-title img {
+  height: 58px;
+  width: 58px;
+  object-fit: contain;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 50% 42% 55% 45% / 48% 55% 45% 52%;
+  transform: rotate(-6deg);
+  padding: 3px;
+}
+.game-title h1 {
+  font-size: clamp(26px, 5.5vw, 44px);
+  margin: 0;
+  letter-spacing: 1px;
+  transform: rotate(-0.6deg);
+  text-shadow: 2px 2px 0 rgba(122, 74, 43, 0.25);
+}
+.sub {
+  font-size: 15px;
+  color: var(--gray);
+  margin: 0 0 18px;
+  transform: rotate(0.4deg);
+}
+
+h2.q {
+  font-size: clamp(20px, 4vw, 28px);
+  margin: 6px 0 4px;
+  transform: rotate(-0.5deg);
+}
+.hint { font-size: 14px; color: var(--gray); margin: 0 0 16px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  font-family: var(--comic);
+  font-size: 18px;
+  color: var(--ink);
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  padding: 10px 26px;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+  box-shadow: 3px 3px 0 rgba(23, 19, 15, 0.9);
+}
+.btn:hover { transform: rotate(-1.5deg) scale(1.05); }
+.btn:active { transform: scale(0.96); box-shadow: 1px 1px 0 rgba(23,19,15,.9); }
+.btn.go {
+  background: var(--green);
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.35);
+}
+.btn.go:hover { background: var(--green-dk); }
+.btn.big { font-size: 22px; padding: 14px 34px; }
+.btn[disabled] { opacity: 0.45; cursor: wait; }
+
+.btn-plain {
+  font-family: var(--comic);
+  font-size: 15px;
+  background: none;
+  border: none;
+  color: var(--gray);
+  text-decoration: underline wavy;
+  cursor: pointer;
+  padding: 8px;
+}
+.btn-plain:hover { color: var(--red); }
+
+/* ============================================================
+   SCREEN 1 — CRT SETUP
+   ============================================================ */
+.crt-wrap {
+  width: min(980px, 100%);
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .crt-wrap { grid-template-columns: 1fr; }
+  /* preview first on mobile so users see what the sliders do */
+  .crt-wrap > div:last-child { order: -1; }
+}
+
+.presets { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 16px; }
+.preset {
+  font-family: var(--comic);
+  font-size: 14px;
+  padding: 6px 16px;
+  background: var(--paper-dk);
+  border: 3px solid var(--ink);
+  border-radius: 155px 12px 135px 12px / 12px 135px 12px 155px;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+.preset:hover { transform: rotate(2deg) scale(1.07); }
+.preset.sel { background: var(--brown); color: #fff; }
+
+.grp {
+  position: relative;
+  border: 3px solid var(--ink);
+  border-radius: 15px 225px 15px 255px / 225px 15px 255px 15px;
+  background: #fff;
+  padding: 18px 16px 12px;
+  margin-bottom: 16px;
+}
+.grp > .grp-title {
+  position: absolute;
+  top: -14px;
+  left: 14px;
+  font-size: 13px;
+  background: var(--ink);
+  color: #fff;
+  padding: 1px 12px;
+  transform: rotate(-1.6deg);
+  border-radius: 90px 8px 80px 8px / 8px 80px 8px 90px;
+}
+
+.ctl { margin-bottom: 10px; }
+.ctl .lab {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+.ctl .lab b { font-weight: normal; color: var(--brown); }
+.ctl .lab span { color: var(--gray); }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 24px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 12px;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 90px 6px 80px 8px / 8px 80px 6px 90px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -6px;
+  background: var(--brown);
+  border: 2.5px solid var(--ink);
+  border-radius: 60% 40% 55% 45% / 45% 55% 42% 58%;
+}
+input[type="range"]::-moz-range-track {
+  height: 12px;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 90px 6px 80px 8px / 8px 80px 6px 90px;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--brown);
+  border: 2.5px solid var(--ink);
+  border-radius: 60% 40% 55% 45% / 45% 55% 42% 58%;
+}
+
+.chk {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  margin: 8px 0;
+  cursor: pointer;
+}
+.chk input { width: 20px; height: 20px; accent-color: var(--brown); cursor: pointer; }
+
+.crt-actions { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 6px; }
+.crt-note { font-size: 12px; color: var(--gray); margin-top: 6px; text-align: center; }
+
+/* preview panel (polaroid vibes) */
+.preview-card {
+  position: relative;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 15px 225px 15px 255px / 225px 15px 255px 15px;
+  padding: 14px 14px 10px;
+  transform: rotate(1.2deg);
+  box-shadow: 4px 5px 0 rgba(23, 19, 15, 0.15);
+}
+.preview-card::before, .preview-card::after {
+  content: "";
+  position: absolute;
+  width: 74px;
+  height: 22px;
+  background: rgba(244, 236, 200, 0.85);
+  border: 1px solid rgba(23, 19, 15, 0.18);
+  top: -12px;
+}
+.preview-card::before { left: 18px; transform: rotate(-8deg); }
+.preview-card::after { right: 18px; transform: rotate(6deg); }
+.preview-card canvas {
+  display: block;
+  width: 100%;
+  background: #000;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  image-rendering: auto;
+}
+.preview-cap { text-align: center; font-size: 13px; margin-top: 8px; color: var(--brown); }
+.crt-sticker {
+  text-align: center;
+  margin-top: 14px;
+}
+.crt-sticker img {
+  width: 130px;
+  image-rendering: auto;
+  transform: rotate(-4deg);
+}
+
+/* ============================================================
+   SCREEN 2 — DOWNLOAD / CACHE
+   ============================================================ */
+.dl { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70vh; width: min(640px, 100%); }
+.dl .pen { height: 92px; margin-bottom: 8px; transform: rotate(-8deg); }
+.pct {
+  font-size: clamp(56px, 12vw, 88px);
+  line-height: 1;
+  margin: 14px 0 4px;
+  text-shadow: 3px 3px 0 rgba(55, 179, 74, 0.35);
+}
+.pct small { font-size: 0.4em; color: var(--gray); }
+.bar {
+  width: 100%;
+  height: 38px;
+  background: #fff;
+  border: 3.5px solid var(--ink);
+  border-radius: 190px 12px 170px 14px / 14px 170px 12px 190px;
+  overflow: hidden;
+  margin: 10px 0 12px;
+  transform: rotate(-0.4deg);
+}
+.bar-fill {
+  height: 100%;
+  width: 0%;
+  background: repeating-linear-gradient(
+    -45deg, var(--green) 0 14px, var(--green-dk) 14px 28px
+  );
+  background-size: 200% 100%;
+  animation: crawl 0.9s linear infinite;
+  transition: width 0.18s ease;
+}
+@keyframes crawl { from { background-position: 0 0; } to { background-position: 39.6px 0; } }
+.dl-meta { font-size: 14px; color: var(--gray); }
+.dl-file {
+  font-size: 12px;
+  color: var(--gray);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 4px;
+  min-height: 16px;
+}
+.dl-warn { color: var(--red); font-size: 13px; margin-top: 8px; }
+
+/* ============================================================
+   SCREEN 3 — PWA INSTALL
+   ============================================================ */
+.pwa-card {
+  width: min(560px, 100%);
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  padding: 30px 26px;
+  text-align: center;
+  box-shadow: 5px 6px 0 rgba(23, 19, 15, 0.15);
+}
+.pwa-card img.pen { height: 84px; transform: rotate(-7deg); margin-bottom: 6px; }
+.pwa-rows { text-align: left; margin: 14px auto 6px; font-size: 15px; max-width: 360px; }
+.pwa-rows div { margin: 6px 0; }
+.pwa-rows span { display: inline-block; transform: rotate(-3deg); margin-right: 8px; }
+.pwa-actions { display: flex; flex-direction: column; gap: 4px; align-items: center; margin-top: 14px; }
+.pwa-hint { font-size: 13px; color: var(--gray); margin-top: 10px; }
+.pwa-ios { font-size: 14px; background: var(--paper-dk); border: 2px dashed var(--ink); border-radius: 12px; padding: 10px 14px; margin-top: 10px; }
+
+/* ============================================================
+   SCREEN 4 — CREDITS (b29s)
+   ============================================================ */
+#boot.dark .credits {
+  color: #fff;
+  font-size: clamp(20px, 4.5vw, 30px);
+  letter-spacing: 1px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+#boot.dark .credits.show { opacity: 1; }
+#boot.dark .credits .sm { display: block; font-size: 13px; color: #9a9a9a; margin-top: 14px; }
+
+/* ============================================================
+   ERROR STATE
+   ============================================================ */
+.err-box {
+  width: min(520px, 100%);
+  background: #fff;
+  border: 3px solid var(--red);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  padding: 22px;
+  text-align: center;
+}
+.err-box h3 { color: var(--red); margin: 0 0 8px; }
+
+/* ============================================================
+   IN-GAME CRT CORNER BUTTONS + PANEL
+   ============================================================ */
+#crtUI {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 950;
+  display: flex;
+  gap: 6px;
+  font-family: var(--comic);
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+}
+#crtUI:hover { opacity: 1; }
+#crtUI button {
+  font-family: var(--comic);
+  font-size: 11px;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 90px 8px 80px 10px / 10px 80px 8px 90px;
+  cursor: pointer;
+}
+#crtUI button.on { background: var(--green); color: #fff; }
+
+#crtPanel {
+  position: fixed;
+  right: 10px;
+  bottom: 48px;
+  z-index: 951;
+  width: min(330px, calc(100vw - 20px));
+  max-height: 78vh;
+  overflow-y: auto;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 15px 225px 15px 255px / 225px 15px 255px 15px;
+  padding: 20px 14px 12px;
+  font-family: var(--comic);
+  font-size: 13px;
+}
+#crtPanel h4 { margin: 0 0 8px; transform: rotate(-1deg); }
+#crtPanel .close-x {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+/* small screens */
+@media (max-width: 600px) {
+  .screen { padding: 22px 12px 50px; }
+  .game-title img { height: 44px; width: 44px; }
+}
