@@ -17,7 +17,7 @@ The site is 100% static — no build step, no config. Push to any static host an
 
 **One-click deploy to Vercel:**
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimongithublolo%2Fshitstick-adventure&project-name=shitstick-adventure&repository-name=shitstick-adventure)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimongithublolo%2Fshit-stick-adventure&project-name=shitstick-adventure&repository-name=shitstick-adventure)
 
 or manually:
 
